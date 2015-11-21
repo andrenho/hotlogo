@@ -1,1 +1,53 @@
-.
+Exemplo 1
+
+repita 4 [ pf 40 pd 90 ]
+
+
+
+Exemplo 2
+
+aprenda fibonacci :n
+  se :n = 0 [ retorne 0 ]
+  se :n = 1 [ retorne 1 ]
+  retorne fibonacci (n-1) + fibonacci (n-2)
+fim
+
+
+
+---------------------------------------------------
+break - saia
+goto - vá_para
+do...end - faça [ ]
+while...do...end - enquanto [] faça []
+repeat...until - repita [] até []
+if...then..elseif..else..end - se ... [] senão []
+for..=..do..end - 
+for..in..do..end - para cada :x em ... []
+function - aprenda
+return - retorne
+nil - nulo
+false - false
+true - verdadeiro
+and - e
+or - ou
+
+
+Exemplo 1 :
+
+repita 4 [ pf(40) pd(90) ]
+
+repita 4 [ pf 40 pd 90 ]
+
+
+Exemplo 2 :
+
+aprenda fibonacci(n)
+  se n == 0 [ retorne 0 ] 
+    caso n == 1 [ retorne 1 ] 
+    senão [ retorne fibonacci(n-1) + fibonacci(n-2) ]
+fim
+
+escreva( fibonacci(4) )
+
+
+
