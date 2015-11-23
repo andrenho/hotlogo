@@ -14,9 +14,17 @@ class Value {
         };
 
         // TODO - validate types
-        Value(Type type, double n) { impl_.n = n; }
-        Value(Type type, string const& s) { impl_.s = s; }
-        Value(Type type, vector<Value> const& v) { impl_.v = v; }
+        Value(Type type, double n) { 
+            impl_.n = n; 
+        }
+
+        Value(Type type, string const& s) { 
+            impl_.s = s; 
+        }
+
+        Value(Type type, vector<Value> const& v) { 
+            impl_.v = v; 
+        }
 
         ~Value() {}
 
@@ -36,7 +44,6 @@ class Value {
             vector<Value> v;
 
             Impl() {
-                new(&s) string;
             }
             ~Impl() {}
             Impl& operator=(const Impl& v) {
