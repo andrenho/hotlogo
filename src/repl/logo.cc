@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 extern "C" {
     #include <lua.h>
     #include <lauxlib.h>
@@ -15,7 +16,7 @@ extern "C" {
 Logo::Logo()
     : L(luaL_newstate())
 {
-    putenv("LUA_PATH=../?.lua;;");
+    putenv(strdup("LUA_PATH=../?.lua;;"));
     luaL_openlibs(L);
     int r = luaL_loadfile(L, "../eval-apply/eval-apply.lua");
     assert(r == LUA_OK);
@@ -79,7 +80,12 @@ Logo::Eval() const
     lua_getglobal(L, "eval");
     assert(lua_gettop(L) == 2);
     lua_insert(L, 1);
-    lua_pcall(L, 1, 1, 0);
+
+    lua_pushboolean(L, 1);
+    lua_pcall(L, 2, 1, 0);
+    
+    // lua_pcall(L, 1, 1, 0);
+
     Print();
 }
 

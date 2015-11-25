@@ -20,7 +20,8 @@ atribua                     return DEFINE;
 \]                          return ']';
 
 [-+]?[0-9]*\.?[0-9]+        yylval.number = strtod(yytext, NULL); return NUMBER;
-[A-Za-z][A-Za-z0-9_\-\.]*   yylval.text = strdup(yytext); return IDENTIFIER;
+[^: \n]+                    yylval.text = strdup(yytext); return IDENTIFIER;
+\:[^: \n]+                  yylval.text = strdup(yytext); return SYMBOL;
 
 .                           ;
 \n                          ;

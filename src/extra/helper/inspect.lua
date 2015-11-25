@@ -66,7 +66,7 @@ end
 
 function inspect(...)
   return table.concat(map({...}, 
-    function(v) return value(v, 2, 0) end), '\t')
+    function(v) return value(v, 3, 0) end), '\t')
 end
 
 function p(...)

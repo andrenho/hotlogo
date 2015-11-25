@@ -32,10 +32,10 @@ int main()
     char* text;
     double number;
 }
-%type<text> IDENTIFIER
+%type<text> IDENTIFIER SYMBOL
 %type<number> NUMBER
 
-%token IDENTIFIER NUMBER 
+%token IDENTIFIER NUMBER SYMBOL
 %token LEARN END DEFINE
 
 %% 
@@ -44,8 +44,21 @@ blocks:
       | blocks block
       ;
 
-block: LEARN IDENTIFIER blocks END
-     | DEFINE { logo.OpenList(); logo.Add("define"); } IDENTIFIER { logo.Add(string($3)); } exp { logo.CloseList(); }
+attribution: DEFINE { logo.OpenList(); logo.Add("define"); } 
+             SYMBOL { logo.Add(string($3)); } 
+             exp { logo.CloseList(); }
+
+parameters:
+          | parameters SYMBOL { logo.Add(string($2)); }
+
+learning: LEARN { logo.OpenList(); logo.Add("define"); }
+          IDENTIFIER { logo.Add($3); logo.OpenList(); logo.Add("lambda"); logo.OpenList(); }
+          parameters { logo.CloseList(); logo.OpenList(); }
+          blocks 
+          END { logo.CloseList(); logo.CloseList(); logo.CloseList(); }
+
+block: learning
+     | attribution
      | exp
      ;
 

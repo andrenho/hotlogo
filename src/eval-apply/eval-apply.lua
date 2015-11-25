@@ -17,7 +17,12 @@ end
 env = Environment:new()
 
 
-function eval(exp)
+function eval(exp, debug)
+
+  if debug then
+    io.write("eval> ")
+    p(exp)
+  end
 
   -- string - try to find the symbol value, if not a symbol then returns self
   if type(exp) == 'string' then
@@ -93,6 +98,27 @@ function apply(f, pars)
     return r
   else
     logo_error('Can\'t apply '..inspect(f))
+  end
+end
+
+
+-- 
+-- HELPER FUNCTIONS (for C)
+--
+function is_function(name)
+  local f = env:get(name)
+  return f.tag == 'lambda' or f.tag == 'primitive'
+end
+
+
+function parameter_count(name)
+  local f = env:get(name)
+  if f.tag == 'lambda' then
+    return #f.parameters
+  elseif f.tag == 'primitive' then
+    return f.n_pars
+  else
+    return -1
   end
 end
 
