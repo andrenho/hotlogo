@@ -59,6 +59,13 @@ Logo::Add(string const& s)
     } else {
         lua_seti(L, -2, luaL_len(L, -2) + 1);
     }
+
+    if(parameters_left > 0) {
+        --parameters_left;
+        if(parameters_left == 0) {
+            CloseList();
+        }
+    }
 }
 
 
@@ -71,6 +78,33 @@ Logo::Add(double d)
     } else {
         lua_seti(L, -2, luaL_len(L, -2) + 1);
     }
+
+    if(parameters_left > 0) {
+        --parameters_left;
+        if(parameters_left == 0) {
+            CloseList();
+        }
+    }
+}
+
+
+void 
+Logo::AddCommand(string const& s)
+{
+    // find number of parameters of this command
+    lua_getglobal(L, "parameter_count");
+    lua_pushstring(L, s.c_str());
+    lua_pcall(L, 1, 1, 0);
+    int n_pars = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    if(n_pars == -1) {
+        Error("Ainda não aprendi " + s);
+    }
+
+    parameters_left = n_pars + 1;  // +1 because we are counting the command itself
+    OpenList();
+    Add(s);
 }
 
 
@@ -100,6 +134,8 @@ Logo::Print() const
         printf("%g\n", lua_tonumber(L, 1));
     } else if(t == LUA_TSTRING) {
         printf("\"%s\"\n", lua_tostring(L, 1));
+    } else if(t == LUA_TBOOLEAN) {
+        if(lua_toboolean(L, 1)) { printf("sim\n"); } else { printf("não\n"); }
     } else if(t != LUA_TNIL) {
         printf("unsupported type %s\n", lua_typename(L, t));
     }
@@ -107,6 +143,14 @@ Logo::Print() const
     lua_pop(L, 1);
 }
 
+
+
+void 
+Logo::Error(string const& s)
+{
+    extern void yyerror(const char* s);
+    yyerror(s.c_str());
+}
 
 
 string

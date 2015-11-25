@@ -26,8 +26,19 @@ function eval(exp, debug)
 
   -- string - try to find the symbol value, if not a symbol then returns self
   if type(exp) == 'string' then
+
+    if exp == 'true' then
+      return true
+    elseif exp == 'false' then
+      return false
+    end
+
     local n = env:get(exp)
     if n then return n else return exp end
+
+  -- boolean
+  elseif type(exp) == 'boolean' then
+    return exp
 
   -- numeric
   elseif type(exp) == 'number' then
@@ -105,15 +116,11 @@ end
 -- 
 -- HELPER FUNCTIONS (for C)
 --
-function is_function(name)
-  local f = env:get(name)
-  return f.tag == 'lambda' or f.tag == 'primitive'
-end
-
-
 function parameter_count(name)
   local f = env:get(name)
-  if f.tag == 'lambda' then
+  if not f then
+    return -1
+  elseif f.tag == 'lambda' then
     return #f.parameters
   elseif f.tag == 'primitive' then
     return f.n_pars

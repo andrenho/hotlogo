@@ -36,7 +36,7 @@ int main()
 %type<number> NUMBER
 
 %token IDENTIFIER NUMBER SYMBOL
-%token LEARN END DEFINE
+%token LEARN END DEFINE TRUE FALSE
 
 %% 
 
@@ -44,26 +44,28 @@ blocks:
       | blocks block
       ;
 
-attribution: DEFINE { logo.OpenList(); logo.Add("define"); } 
-             SYMBOL { logo.Add(string($3)); } 
-             exp { logo.CloseList(); }
+attribution: DEFINE     { logo.OpenList(); logo.Add("define"); } 
+             SYMBOL     { logo.Add(string($3)); } 
+             exp        { logo.CloseList(); }
 
-parameters:
-          | parameters SYMBOL { logo.Add(string($2)); }
+learn_parameters:
+                | learn_parameters SYMBOL { logo.Add(string($2)); }
 
-learning: LEARN { logo.OpenList(); logo.Add("define"); }
-          IDENTIFIER { logo.Add($3); logo.OpenList(); logo.Add("lambda"); logo.OpenList(); }
-          parameters { logo.CloseList(); logo.OpenList(); }
+learning: LEARN             { logo.OpenList(); logo.Add("define"); }
+          IDENTIFIER        { logo.Add($3); logo.OpenList(); logo.Add("lambda"); logo.OpenList(); }
+          learn_parameters  { logo.CloseList(); logo.OpenList(); }
           blocks 
-          END { logo.CloseList(); logo.CloseList(); logo.CloseList(); }
+          END               { logo.CloseList(); logo.CloseList(); logo.CloseList(); }
 
 block: learning
      | attribution
      | exp
      ;
 
-exp: IDENTIFIER     { logo.Add(string($1)); }
+exp: IDENTIFIER     { logo.AddCommand(string($1)); }
    | NUMBER         { logo.Add($1); }
+   | TRUE           { logo.Add("true"); }
+   | FALSE          { logo.Add("false"); }
    ;
 
 %%

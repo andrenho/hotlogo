@@ -13,9 +13,12 @@ public:
     void CloseList();
     void Add(string const& s);
     void Add(double d);
+    
+    void AddCommand(string const& s);
 
     void Eval() const;
     void Print() const;
+    void Error(string const& s);
 
 private:
     struct lua_State* L = nullptr;
@@ -23,6 +26,8 @@ private:
     string StackDump() const;
 
     int level = 0;
+
+    int parameters_left = 0;
 };
 
 #endif

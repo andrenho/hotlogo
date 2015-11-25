@@ -52,15 +52,4 @@ function Environment:add_primitive(name, n_pars, code)
 end
 
 
-------------------
---  PRIMITIVES  --
-------------------
-
-function Environment:add_primitives()
-  self:add_primitive('+', 2, function(x, y) return x+y end)
-  self:add_primitive('>', 2, function(x, y) return x>y end)
-  self:add_primitive('write', 1, function(v) p(v) end)
-end
-
-
 -- vim: ts=2:sw=2:sts=2:expandtab
