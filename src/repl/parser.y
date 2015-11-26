@@ -30,13 +30,15 @@ int main()
 
 %union {
     char* text;
+    char* symbol;
     double number;
 }
-%type<text> IDENTIFIER SYMBOL
+%type<text> IDENTIFIER
+%type<symbol> SYMBOL
 %type<number> NUMBER
 
 %token IDENTIFIER NUMBER SYMBOL
-%token LEARN END DEFINE TRUE FALSE
+%token LEARN END DEFINE TRUE FALSE IF
 
 %% 
 
@@ -44,15 +46,15 @@ blocks:
       | blocks block
       ;
 
-attribution: DEFINE     { logo.OpenList(); logo.Add("define"); } 
+attribution: DEFINE     { logo.OpenList("define"); } 
              SYMBOL     { logo.Add(string($3)); } 
              exp        { logo.CloseList(); }
 
 learn_parameters:
                 | learn_parameters SYMBOL { logo.Add(string($2)); }
 
-learning: LEARN             { logo.OpenList(); logo.Add("define"); }
-          IDENTIFIER        { logo.Add($3); logo.OpenList(); logo.Add("lambda"); logo.OpenList(); }
+learning: LEARN             { logo.OpenList("define"); }
+          IDENTIFIER        { logo.Add($3); logo.OpenList("lambda"); logo.OpenList(); }
           learn_parameters  { logo.CloseList(); logo.OpenList(); }
           blocks 
           END               { logo.CloseList(); logo.CloseList(); logo.CloseList(); }
@@ -62,10 +64,22 @@ block: learning
      | exp
      ;
 
-exp: IDENTIFIER     { logo.AddCommand(string($1)); }
+exps:
+    | exps exp
+    ;
+
+if: IF              { logo.OpenList("if"); }
+    exp
+    '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); }
+    '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); logo.CloseList(); }
+
+exp: if
+   | IDENTIFIER     { logo.AddCommand(string($1)); }
    | NUMBER         { logo.Add($1); }
+   | SYMBOL         { logo.Add($1); }
    | TRUE           { logo.Add("true"); }
    | FALSE          { logo.Add("false"); }
+   | '[' { logo.OpenList("quote"); } exps ']' { logo.CloseList(); }
    ;
 
 %%

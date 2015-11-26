@@ -17,6 +17,8 @@ CHR         [^ \t\n\:]
 aprenda                     return LEARN;
 fim                         return END;
 atribua                     return DEFINE;
+se                          return IF;
+
 sim                         return TRUE;
 não                         return FALSE;
 
@@ -25,7 +27,7 @@ não                         return FALSE;
 
 [-+]?[0-9]*\.?[0-9]+        yylval.number = strtod(yytext, NULL); return NUMBER;
 {CHR}+                      yylval.text = strdup(yytext); return IDENTIFIER;
-\:{CHR}+                    yylval.text = strdup(yytext); return SYMBOL;
+\:{CHR}+                    yylval.symbol = strdup(yytext); return SYMBOL;
 
 .                           ;
 \n                          ;

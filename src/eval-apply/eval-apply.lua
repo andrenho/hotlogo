@@ -24,8 +24,12 @@ function eval(exp, debug)
     p(exp)
   end
 
+  if not exp then
+
+    return nil
+
   -- string - try to find the symbol value, if not a symbol then returns self
-  if type(exp) == 'string' then
+  elseif type(exp) == 'string' then
 
     if exp == 'true' then
       return true
@@ -64,6 +68,12 @@ function eval(exp, debug)
       for i=2,#exp do v[#v+1] = exp[i] end
       return v
 
+    -- begin
+    elseif exp[1] == 'begin' then
+      local r
+      for i=2,#exp do r = eval(exp[i]) end
+      return r
+
     -- if
     elseif exp[1] == 'if' then
       if #exp ~= 3 and #exp ~=4 then logo_error('Invalid number of arguments for if') end
@@ -78,7 +88,7 @@ function eval(exp, debug)
     -- regular list -- apply it!
     else
       local pp = {}
-      for _,n in ipairs(exp) do pp[#pp+1] = eval(n, env) end
+      for _,n in ipairs(exp) do pp[#pp+1] = eval(n) end
       f = table.remove(pp, 1)  -- extract function
       return apply(f, pp)
 
@@ -152,7 +162,12 @@ p(eval { 'sum', 2, 3 })
 
 eval { 'write', { 'quote', 1, 2, 3 } }
 
-eval { 'write', { 'if', { '>', { 'sum', 2, 3 }, 6 }, 'yes', 'no' } }
+
+--eval { 'esc', { 'if', { '>', { '+', 2, 3 }, 6 }, 'yes', 'no' } }
 ]]
+
+--p(eval { 'quote', 1, 2, 3 })
+--eval { 'begin', { 'esc', 1 }, { 'esc', 2 } }
+--eval { 'if', true, { 'begin', { 'esc', 1 }, { 'esc', 3 } }, { 'begin', { 'esc', 2 } } }
 
 -- vim: ts=2:sw=2:sts=2:expandtab

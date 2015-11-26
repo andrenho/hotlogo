@@ -31,10 +31,14 @@ Logo::~Logo()
 
 
 void 
-Logo::OpenList()
+Logo::OpenList(string const& s)
 {
     ++level;
     lua_newtable(L);
+    if(s != "") {
+        lua_pushstring(L, s.c_str());
+        lua_seti(L, -2, luaL_len(L, -2) + 1);
+    }
 }
 
 

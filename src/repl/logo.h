@@ -9,7 +9,7 @@ public:
     Logo();
     ~Logo();
 
-    void OpenList();
+    void OpenList(string const& s="");
     void CloseList();
     void Add(string const& s);
     void Add(double d);
