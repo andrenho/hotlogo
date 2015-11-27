@@ -43,6 +43,18 @@ Logo::OpenList(string const& s)
 
 
 void 
+Logo::OpenListInv(string const& s)
+{
+    ++level;
+    lua_newtable(L);
+    lua_pushstring(L, s.c_str());
+    lua_seti(L, -2, luaL_len(L, -2) + 1);
+    lua_insert(L, 1);
+    lua_seti(L, -2, luaL_len(L, -2) + 1);
+}
+
+
+void 
 Logo::CloseList()
 {
     --level;
@@ -78,7 +90,7 @@ Logo::Add(double d)
 {
     lua_pushnumber(L, d);
     if(level == 0) {
-        Eval();
+        //Eval();  -- TODO
     } else {
         lua_seti(L, -2, luaL_len(L, -2) + 1);
     }
@@ -127,7 +139,10 @@ void
 Logo::Eval() const
 {
     lua_getglobal(L, "eval");
-    assert(lua_gettop(L) == 2);
+    if(lua_gettop(L) != 2) {
+        StackDump();
+        assert(lua_gettop(L) == 2);
+    }
     lua_insert(L, 1);
 
     lua_pushboolean(L, 1);

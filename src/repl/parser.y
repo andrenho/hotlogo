@@ -39,7 +39,7 @@ int main()
 %type<number> NUMBER
 
 %token IDENTIFIER NUMBER SYMBOL
-%token LEARN END DEFINE TRUE FALSE IF
+%token LEARN END DEFINE TRUE FALSE IF REPEAT NOT AND OR NEQ GEQ LEQ
 
 %% 
 
@@ -65,23 +65,58 @@ block: learning
      | exp
      ;
 
-exps:
-    | exps exp
-    ;
-
 if: IF  { logo.OpenList("if"); }
     exp
     '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); }
     '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); logo.CloseList(); }
 
-exp: if
-   | IDENTIFIER     { logo.AddCommand(string($1)); }
-   | NUMBER         { logo.Add($1); }
-   | SYMBOL         { logo.Add($1); }
-   | TRUE           { logo.Add("true"); }
-   | FALSE          { logo.Add("false"); }
-   | '[' { logo.OpenList("quote"); } exps ']' { logo.CloseList(); }
+repeat: REPEAT { logo.OpenList("repeat"); }
+        exp
+        '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); logo.CloseList(); }
+
+primary_exp: if
+           | repeat
+           | NUMBER         { logo.Add($1); }
+           | SYMBOL         { logo.Add($1); }
+           | TRUE           { logo.Add("true"); }
+           | FALSE          { logo.Add("false"); }
+           | '[' { logo.OpenList("quote"); } exps ']' { logo.CloseList(); }
+           | '(' exp ')'
+           ;
+
+eq_exp: primary_exp
+      | eq_exp '=' primary_exp
+      | eq_exp NEQ primary_exp
+      | eq_exp '>' primary_exp
+      | eq_exp '<' primary_exp
+      | eq_exp GEQ primary_exp
+      | eq_exp LEQ primary_exp
+      ;
+
+sum_exp: eq_exp
+       | sum_exp { logo.OpenListInv("__sum"); } '+' eq_exp { logo.CloseList(); }
+       | sum_exp '-' eq_exp
+       ;
+
+mult_exp: sum_exp
+        | mult_exp '*' sum_exp
+        | mult_exp '/' sum_exp
+        ;
+
+and_or_exp: mult_exp
+          | and_or_exp AND mult_exp
+          | and_or_exp OR mult_exp
+          ;
+
+exp: and_or_exp
+   | '-' and_or_exp
+   | NOT and_or_exp
+           | IDENTIFIER     { logo.AddCommand(string($1)); }
    ;
+
+exps:
+    | exps exp
+    ;
 
 %%
 

@@ -85,6 +85,15 @@ function eval(exp, debug)
         return nil
       end
 
+    -- repeat
+    elseif exp[1] == 'repeat' then
+      if #exp ~= 3 then logo_error('Invalid number of arguments for repeat') end
+      local n = eval(exp[2])
+      if type(n) ~= 'number' then logo_error('Expected number for second argument of repeat') end
+      local r
+      for _=1,n do r = eval(exp[3]) end
+      return r
+
     -- regular list -- apply it!
     else
       local pp = {}

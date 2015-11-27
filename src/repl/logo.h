@@ -10,6 +10,7 @@ public:
     ~Logo();
 
     void OpenList(string const& s="");
+    void OpenListInv(string const& s);
     void CloseList();
     void Add(string const& s);
     void Add(double d);
