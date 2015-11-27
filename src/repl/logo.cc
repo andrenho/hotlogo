@@ -90,7 +90,7 @@ Logo::Add(double d)
 {
     lua_pushnumber(L, d);
     if(level == 0) {
-        //Eval();  -- TODO
+        Eval();
     } else {
         lua_seti(L, -2, luaL_len(L, -2) + 1);
     }

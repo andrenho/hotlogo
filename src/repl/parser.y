@@ -74,9 +74,7 @@ repeat: REPEAT { logo.OpenList("repeat"); }
         exp
         '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); logo.CloseList(); }
 
-primary_exp: if
-           | repeat
-           | NUMBER         { logo.Add($1); }
+primary_exp: NUMBER         { logo.Add($1); }
            | SYMBOL         { logo.Add($1); }
            | TRUE           { logo.Add("true"); }
            | FALSE          { logo.Add("false"); }
@@ -108,10 +106,15 @@ and_or_exp: mult_exp
           | and_or_exp OR mult_exp
           ;
 
-exp: and_or_exp
-   | '-' and_or_exp
-   | NOT and_or_exp
-           | IDENTIFIER     { logo.AddCommand(string($1)); }
+unary_exp: and_or_exp
+         | '-' and_or_exp
+         | NOT and_or_exp
+         ;
+
+exp: IDENTIFIER     { logo.AddCommand(string($1)); }
+   | if
+   | repeat
+   | unary_exp
    ;
 
 exps:
