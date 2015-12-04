@@ -6,14 +6,8 @@ extern void yyerror(const char* s);
 
 LPU::LPU()
 {
-    functions["att"] = Function { "att", 0, [](LPU&) { 
-        cout << "ATT" << endl; 
-    } };
-
-    functions["pf"] = Function { "pf", 1, [](LPU& lpu) { 
-        cout << "Turtle moves" << endl; 
-    } };
-
+    InitializePrimitives();
+    RegisterFunctions();
 }
 
 

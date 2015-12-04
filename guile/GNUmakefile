@@ -8,6 +8,10 @@ CPPFLAGS += -fdiagnostics-color=always -pipe -fPIC -rdynamic -D_FILE_OFFSET_BITS
 CXXFLAGS += -std=c++14
 LDFLAGS += -Wl,--no-as-needed
 
+# add libraries
+CPPFLAGS += `guile-config compile`
+LDFLAGS += `guile-config link`
+
 # add debugging
 ifeq (${DEBUG},1)
   CPPFLAGS += -g3 -ggdb -DDEBUG
@@ -82,7 +86,7 @@ all: lang
 
 lpu.o: lpu.cc lpu.h
 
-lang: scanner.o parser.o lpu.o
+lang: scanner.o parser.o lpu.o lpu_primitives.o
 ifneq (${DEBUG_MAKE},1)
 	@echo -e '${green}${CXX} -o lang${done}'
 endif

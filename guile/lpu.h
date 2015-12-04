@@ -13,7 +13,6 @@ using namespace std;
 enum class LType { NOTHING, NUMBER, FUNCTION };
 
 struct Function {
-    string internal_name;
     size_t parameters;
     function<void(class LPU&)> f;
 };
@@ -33,6 +32,9 @@ public:
     void PrintBuffer() const;
 
 private:
+    void InitializePrimitives();
+    void RegisterFunctions();
+
     stringstream buffer;
 
     stack<int> parameters_expected;
