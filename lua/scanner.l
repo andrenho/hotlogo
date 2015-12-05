@@ -20,6 +20,9 @@ repita                      return REPEAT;
 [-+]?[0-9]*\.?[0-9]+        yylval.number = strtod(yytext, NULL); return NUMBER;
 [A-Za-z][A-Za-z0-9_\-\.]*   yylval.text = strdup(yytext); return IDENTIFIER;
 
+.                           ;
+\n                          ;
+
 %%
 
 // vim: ts=4:sw=4:sts=4:expandtab
