@@ -36,7 +36,7 @@ int main()
 %type<number> NUMBER
 
 %token IDENTIFIER NUMBER 
-%token REPEAT LEARN END
+%token LEARN END DEFINE
 
 %% 
 
@@ -45,10 +45,11 @@ blocks:
       ;
 
 block: LEARN IDENTIFIER blocks END
+     | DEFINE { logo.OpenList(); logo.Add("define"); } IDENTIFIER { logo.Add(string($3)); } exp { logo.CloseList(); }
      | exp
      ;
 
-exp: IDENTIFIER
+exp: IDENTIFIER     { logo.Add(string($1)); }
    | NUMBER         { logo.Add($1); }
    ;
 

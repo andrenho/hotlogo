@@ -1,12 +1,13 @@
 #ifndef LOGO_H
 #define LOGO_H
 
-#include <memory>
+#include <string>
 using namespace std;
 
 class Logo {
 public:
     Logo();
+    ~Logo();
 
     void OpenList();
     void CloseList();
@@ -14,11 +15,14 @@ public:
     void Add(double d);
 
     void Eval() const;
+    void Print() const;
 
 private:
-    unique_ptr<struct lua_State, void(*)(struct lua_State*)> L;
+    struct lua_State* L = nullptr;
 
+    string StackDump() const;
 
+    int level = 0;
 };
 
 #endif

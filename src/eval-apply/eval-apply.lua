@@ -1,4 +1,6 @@
 require 'extra/strict'
+require 'extra/helper/functional'
+require 'extra/helper/inspect'
 require 'eval-apply/environment'
 
 --
@@ -99,6 +101,7 @@ end
 -- test code
 --
 
+--[[
 require 'extra/helper/functional'
 require 'extra/helper/inspect'
 
@@ -117,5 +120,6 @@ p(eval { 'sum', 2, 3 })
 eval { 'write', { 'quote', 1, 2, 3 } }
 
 eval { 'write', { 'if', { '>', { 'sum', 2, 3 }, 6 }, 'yes', 'no' } }
+]]
 
 -- vim: ts=2:sw=2:sts=2:expandtab

@@ -14,7 +14,7 @@
 
 aprenda                     return LEARN;
 fim                         return END;
-repita                      return REPEAT;
+atribua                     return DEFINE;
 
 \[                          return '[';
 \]                          return ']';
