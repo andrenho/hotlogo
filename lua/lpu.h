@@ -30,6 +30,8 @@ public:
     void Push(double d);
     void PushIdentifier(string const& s);
 
+    void RegisterFunction(string const& name);
+
     void PrintBuffer() const;
 
 private:

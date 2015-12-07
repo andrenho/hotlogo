@@ -36,7 +36,8 @@ int main()
 %type<text> IDENTIFIER
 %type<number> NUMBER
 
-%token IDENTIFIER NUMBER REPEAT
+%token IDENTIFIER NUMBER 
+%token REPEAT LEARN END
 
 %% 
 
@@ -45,6 +46,7 @@ blocks:
       ;
 
 block: REPEAT NUMBER { lpu.Add("for _=1," + to_string($2) + " do "); } '[' block ']' { lpu.Add(" end "); }
+     | LEARN IDENTIFIER { lpu.Add("function " + string($2) + "() "); lpu.RegisterFunction(string($2)); } blocks END { lpu.Add(" end"); }
      | exp
      ;
 

@@ -24,7 +24,6 @@ LPU::InitializePrimitives()
         cout << "PF" << endl; 
         return 0;
     } };
-
 }
 
 

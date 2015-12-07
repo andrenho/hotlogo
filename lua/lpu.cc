@@ -84,6 +84,13 @@ LPU::Add(string const& s)
 
 
 void 
+LPU::RegisterFunction(string const& name)
+{
+    functions[name] = Function { 0 /* TODO */, nullptr };
+}
+
+
+void 
 LPU::ExecuteBuffer()
 {
     int r = luaL_loadstring(L, buffer.str().c_str());
