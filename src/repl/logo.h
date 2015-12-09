@@ -15,6 +15,7 @@ public:
     void Add(double d);
     
     void AddCommand(string const& s);
+    void AddTempFunction(string const& s, int n_pars);
 
     void Eval() const;
     void Print() const;

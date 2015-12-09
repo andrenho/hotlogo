@@ -112,6 +112,17 @@ Logo::AddCommand(string const& s)
 }
 
 
+void 
+Logo::AddTempFunction(string const& s, int n_pars)
+{
+    // find number of parameters of this command
+    lua_getglobal(L, "add_temp_function");
+    lua_pushstring(L, s.c_str());
+    lua_pushnumber(L, n_pars);
+    lua_pcall(L, 2, 0, 0);
+}
+
+
 void
 Logo::Eval() const
 {

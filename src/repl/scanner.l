@@ -5,7 +5,7 @@
 #include "parser.hh"
 %}
 
-CHR         [^ \t\n\:]
+CHR         [^ \t\n\[\]\:]
 
 %option     8bit
 %option     warn nodefault

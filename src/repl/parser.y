@@ -18,6 +18,7 @@ void yyerror(const char* s)
     fprintf(stderr, "error: %s in line %d (token \"%s\")\n", s, yylineno, yytext);
 }
 
+int n_pars = 0;
 Logo logo;
 
 int main()
@@ -51,11 +52,11 @@ attribution: DEFINE     { logo.OpenList("define"); }
              exp        { logo.CloseList(); }
 
 learn_parameters:
-                | learn_parameters SYMBOL { logo.Add(string($2)); }
+                | learn_parameters SYMBOL { logo.Add(string($2)); ++n_pars; }
 
 learning: LEARN             { logo.OpenList("define"); }
-          IDENTIFIER        { logo.Add($3); logo.OpenList("lambda"); logo.OpenList(); }
-          learn_parameters  { logo.CloseList(); logo.OpenList(); }
+          IDENTIFIER        { n_pars = 0; logo.Add($3); logo.OpenList("lambda"); logo.OpenList(); }
+          learn_parameters  { logo.AddTempFunction($3, n_pars); logo.CloseList(); logo.OpenList(); }
           blocks 
           END               { logo.CloseList(); logo.CloseList(); logo.CloseList(); }
 
@@ -68,7 +69,7 @@ exps:
     | exps exp
     ;
 
-if: IF              { logo.OpenList("if"); }
+if: IF  { logo.OpenList("if"); }
     exp
     '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); }
     '[' { logo.OpenList("begin"); } exps ']' { logo.CloseList(); logo.CloseList(); }

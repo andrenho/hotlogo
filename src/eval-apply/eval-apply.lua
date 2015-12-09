@@ -139,6 +139,12 @@ function parameter_count(name)
   end
 end
 
+function add_temp_function(name, n_pars)
+  local p = {}
+  for i=1,n_pars do p[#p+1] = 0 end
+  env:set(name, { tag='lambda', parameters=p })
+end
+
 
 -- 
 -- test code
@@ -169,5 +175,7 @@ eval { 'write', { 'quote', 1, 2, 3 } }
 --p(eval { 'quote', 1, 2, 3 })
 --eval { 'begin', { 'esc', 1 }, { 'esc', 2 } }
 --eval { 'if', true, { 'begin', { 'esc', 1 }, { 'esc', 3 } }, { 'begin', { 'esc', 2 } } }
+
+-- eval { 'define', 'x', { 'lambda', {}, { 'begin', { 'x' } } } }
 
 -- vim: ts=2:sw=2:sts=2:expandtab
